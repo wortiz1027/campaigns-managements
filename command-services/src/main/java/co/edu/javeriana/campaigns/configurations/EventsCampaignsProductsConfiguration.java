@@ -1,6 +1,9 @@
 package co.edu.javeriana.campaigns.configurations;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,45 +21,45 @@ public class EventsCampaignsProductsConfiguration {
     String deadRoutingKey;
 
     @Value("${events.amqp.campaignproduct.exchange}")
-    String campaignExchange;
+    String campaignProductExchange;
 
     @Value("${events.amqp.campaignproduct.queue}")
-    String campaignQueue;
+    String campaignProductQueue;
 
     @Value("${events.amqp.campaignproduct.routing-key}")
-    String campaignRoutingKey;
+    String campaignProductRoutingKey;
 
-    @Bean("cp-deatletter-exchange")
-    DirectExchange deadLetterExchange() {
+    @Bean
+    DirectExchange deadLetterExchange2() {
         return new DirectExchange(deadExchange);
     }
 
-    @Bean("cp-dlq")
-    Queue dlq() {
+    @Bean
+    Queue dlq2() {
         return QueueBuilder.durable(deadQueue).build();
     }
 
-    @Bean("cp-queue")
-    Queue queue() {
-        return QueueBuilder.durable(campaignQueue)
+    @Bean
+    Queue queue2() {
+        return QueueBuilder.durable(campaignProductQueue)
                 .withArgument("x-dead-letter-exchange", deadExchange)
                 .withArgument("x-dead-letter-routing-key", deadRoutingKey)
                 .build();
     }
 
-    @Bean("cp-exchange")
-    DirectExchange exchange() {
-        return new DirectExchange(campaignExchange);
+    @Bean
+    DirectExchange exchange2() {
+        return new DirectExchange(campaignProductExchange);
     }
 
-    @Bean("cp-dlq-binding")
-    Binding DLQbinding(Queue dlq, DirectExchange deadLetterExchange) {
-        return BindingBuilder.bind(dlq).to(deadLetterExchange).with(deadRoutingKey);
+    @Bean
+    Binding DLQbinding2(Queue dlq2, DirectExchange deadLetterExchange2) {
+        return BindingBuilder.bind(dlq2).to(deadLetterExchange2).with(deadRoutingKey);
     }
 
-    @Bean("cp-binding")
-    Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(campaignRoutingKey);
+    @Bean
+    Binding binding2(Queue queue2, DirectExchange exchange2) {
+        return BindingBuilder.bind(queue2).to(exchange2).with(campaignProductRoutingKey);
     }
 
 }

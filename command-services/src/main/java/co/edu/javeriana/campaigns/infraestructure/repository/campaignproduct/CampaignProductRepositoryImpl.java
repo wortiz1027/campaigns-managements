@@ -29,7 +29,8 @@ public class CampaignProductRepositoryImpl implements CampaignProductRepository 
                             Optional.of(new CampaignProduct(
                                     rs.getString("CAMPAIGNS_PRODUCTS_ID"),
                                     rs.getString("CAMPAIGNS_ID"),
-                                    rs.getString("PRODUCT_ID")
+                                    rs.getString("PRODUCT_ID"),
+                                    ""
                             ))
             );
         } catch (EmptyResultDataAccessException e) {
@@ -90,6 +91,7 @@ public class CampaignProductRepositoryImpl implements CampaignProductRepository 
 
             return CompletableFuture.completedFuture(Status.DELETED.name());
         } catch (Exception e) {
+            e.printStackTrace();
             return CompletableFuture.completedFuture(Status.ERROR.name());
         }
     }

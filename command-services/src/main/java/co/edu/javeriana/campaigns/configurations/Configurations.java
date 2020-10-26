@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class Configurations {
 
     @Bean
-    @Primary
     public ObjectMapper serializingObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         JavaTimeModule module = new JavaTimeModule();
@@ -33,9 +32,9 @@ public class Configurations {
     }
 
     @Bean
-    public AmqpTemplate template(ConnectionFactory connectionFactory) {
+    public AmqpTemplate template(ConnectionFactory connectionFactory, MessageConverter converter) {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        rabbitTemplate.setMessageConverter(converter);
         return rabbitTemplate;
     }
 

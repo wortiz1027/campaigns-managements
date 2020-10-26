@@ -113,7 +113,7 @@ public class CampaignRepositoryImpl implements CampaignRepository {
     @Override
     public CompletableFuture<String> delete(Campaigns campaigns) {
         try {
-            if (findById(campaigns.getCampaignId()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
+            if (findById(campaigns.getCampaignCode()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
             String sql = "DELETE FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
 

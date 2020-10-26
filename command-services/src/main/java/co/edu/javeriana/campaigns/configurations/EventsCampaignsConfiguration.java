@@ -1,10 +1,9 @@
 package co.edu.javeriana.campaigns.configurations;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,17 +30,17 @@ public class EventsCampaignsConfiguration {
     String campaignRoutingKey;
 
     @Bean
-    DirectExchange deadLetterExchange() {
+    DirectExchange deadLetterExchange1() {
         return new DirectExchange(deadExchange);
     }
 
     @Bean
-    Queue dlq() {
+    Queue dlq1() {
         return QueueBuilder.durable(deadQueue).build();
     }
 
     @Bean
-    Queue queue() {
+    Queue queue1() {
         return QueueBuilder.durable(campaignQueue)
                 .withArgument("x-dead-letter-exchange", deadExchange)
                 .withArgument("x-dead-letter-routing-key", deadRoutingKey)
@@ -49,18 +48,18 @@ public class EventsCampaignsConfiguration {
     }
 
     @Bean
-    DirectExchange exchange() {
+    DirectExchange exchange1() {
         return new DirectExchange(campaignExchange);
     }
 
     @Bean
-    Binding DLQbinding(Queue dlq, DirectExchange deadLetterExchange) {
-        return BindingBuilder.bind(dlq).to(deadLetterExchange).with(deadRoutingKey);
+    Binding DLQbinding1(Queue dlq1, DirectExchange deadLetterExchange1) {
+        return BindingBuilder.bind(dlq1).to(deadLetterExchange1).with(deadRoutingKey);
     }
 
     @Bean
-    Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(campaignRoutingKey);
+    Binding binding1(Queue queue1, DirectExchange exchange1) {
+        return BindingBuilder.bind(queue1).to(exchange1).with(campaignRoutingKey);
     }
 
 }
