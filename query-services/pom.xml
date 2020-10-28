@@ -14,23 +14,100 @@
 	<name>query-services</name>
 	<description>Demo project for Spring Boot</description>
 
+	<!--
+        Developers Teams :P
+    -->
+	<developers>
+		<developer>
+			<id>bsuarez</id>
+			<name>Brian Camilo Suarez Botia</name>
+			<email>bsuarez@javeriana.edu.co</email>
+			<url>https://www.javeriana.edu.co/</url>
+			<organization>Pontificia Universidad Javeriana</organization>
+			<organizationUrl>https://www.javeriana.edu.co/</organizationUrl>
+			<roles>
+				<role>Desarrollador Senior</role>
+			</roles>
+			<timezone>America/Bogota</timezone>
+			<properties>
+				<picture>http://www.oorsprong.org/WebSamples.CountryInfo/Images/Colombia.jpg</picture>
+			</properties>
+		</developer>
+		<developer>
+			<id>efranco</id>
+			<name>Eduardo Franco Rivera</name>
+			<email>efranco@javeriana.edu.co</email>
+			<url>https://www.javeriana.edu.co/</url>
+			<organization>Pontificia Universidad Javeriana</organization>
+			<organizationUrl>https://www.javeriana.edu.co/</organizationUrl>
+			<roles>
+				<role>Desarrollador Senior</role>
+			</roles>
+			<timezone>America/Bogota</timezone>
+			<properties>
+				<picture>http://www.oorsprong.org/WebSamples.CountryInfo/Images/Colombia.jpg</picture>
+			</properties>
+		</developer>
+		<developer>
+			<id>jcelemin</id>
+			<name>John Edward Celemin Florez</name>
+			<email>jcelemin@javeriana.edu.co</email>
+			<url>https://www.javeriana.edu.co/</url>
+			<organization>Pontificia Universidad Javeriana</organization>
+			<organizationUrl>https://www.javeriana.edu.co/</organizationUrl>
+			<roles>
+				<role>Desarrollador Senior</role>
+			</roles>
+			<timezone>America/Bogota</timezone>
+			<properties>
+				<picture>http://www.oorsprong.org/WebSamples.CountryInfo/Images/Colombia.jpg</picture>
+			</properties>
+		</developer>
+		<developer>
+			<id>wortiz</id>
+			<name>Wilman Ortiz</name>
+			<email>wiortiz@javeriana.edu.co</email>
+			<url>https://www.javeriana.edu.co/</url>
+			<organization>Pontificia Universidad Javeriana</organization>
+			<organizationUrl>https://www.javeriana.edu.co/</organizationUrl>
+			<roles>
+				<role>Desarrollador Senior</role>
+			</roles>
+			<timezone>America/Bogota</timezone>
+			<properties>
+				<picture>http://www.oorsprong.org/WebSamples.CountryInfo/Images/Colombia.jpg</picture>
+			</properties>
+		</developer>
+	</developers>
+
 	<properties>
+		<axon.version>4.0.3</axon.version>
 		<java.version>11</java.version>
 		<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -51,6 +128,7 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -61,11 +139,6 @@
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.amqp</groupId>
-			<artifactId>spring-rabbit-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -82,6 +155,15 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>campaigns-query-services</finalName>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
