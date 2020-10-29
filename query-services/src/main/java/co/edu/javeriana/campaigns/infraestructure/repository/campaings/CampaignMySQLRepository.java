@@ -9,7 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.PageImpl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -19,9 +21,21 @@ public class CampaignMySQLRepository implements CampaignRepository {
 
     private final JdbcTemplate template;
 
+    private int count() {
+        return this.template.queryForObject("SELECT count(*) FROM CAMPAIGNS", Integer.class);
+    }
+
     @Override
     public Optional<Page<Campaigns>> findByAll(Pageable paging) {
-        return Optional.empty();
+        String sql = "SELECT * " +
+                     "FROM CAMPAIGNS " +
+                     "ORDER BY CAMPAIGNS_CODE ASC " +
+                     "LIMIT %d OFFSET %d";
+
+        List<Campaigns> products = this.template.query(String.format(sql, paging.getPageSize(), paging.getOffset()),
+                                                        new CampaignsRowMapper());
+
+        return Optional.of(new PageImpl<>(products, paging, count()));
     }
 
     @Override

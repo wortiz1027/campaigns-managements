@@ -45,23 +45,23 @@ public class EventHandler {
 
     @RabbitListener(queues = "${events.amqp.campaignproduct.queue}")
     public void consumerCampaignsProducts(CampaignProduct data) {
-        /*LOG.info("recibiendo campaign product: {}", data);
+        LOG.info("recibiendo campaign product: {}", data);
 
-        Optional<CampaignProduct> campaigns = this.campaignRepository.findById(data.getCampaignCode());
+        Optional<CampaignProduct> campaigns = this.campaignProductRepository.findById(data);
 
         if (data.getStatus().equalsIgnoreCase(Status.CREATED.name()) && campaigns.isEmpty()) {
-            this.campaignRepository.create(campaigns.get());
+            this.campaignProductRepository.create(campaigns.get());
         }
 
         if (data.getStatus().equalsIgnoreCase(Status.UPDATED.name()) && !campaigns.isPresent()) {
-            this.campaignRepository.update(campaigns.get());
+            this.campaignProductRepository.update(campaigns.get());
         }
 
         if (data.getStatus().equalsIgnoreCase(Status.DELETED.name()) && !campaigns.isPresent()) {
-            this.campaignRepository.delete(campaigns.get());
+            this.campaignProductRepository.delete(campaigns.get());
         }
 
-        LOG.info("campaign product with code [{}] has been saved", data.getCampaignCode());*/
+        LOG.info("campaign product with code [{}] has been saved", data.getCampaignId());
     }
 
 }
