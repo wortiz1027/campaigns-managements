@@ -1,4 +1,12 @@
 package co.edu.javeriana.campaigns.dtos.campaignproduct;
 
-public class Response {
+import co.edu.javeriana.campaigns.dtos.Status;
+import lombok.Data;
+
+@Data
+public class Response implements java.io.Serializable {
+
+    private Status status;
+    private CampaignProductDto campaign;
+
 }

@@ -27,7 +27,15 @@ public class CampaignMySQLRepository implements CampaignRepository {
 
     @Override
     public Optional<Page<Campaigns>> findByAll(Pageable paging) {
-        String sql = "SELECT * " +
+        String sql = "SELECT CAMPAIGNS_ID, " +
+                     "CAMPAIGNS_CODE, " +
+                     "CAMPAIGNS_NAME," +
+                     "CAMPAIGNS_DESC," +
+                     "IMAGE_ID, " +
+                     "START_DATE," +
+                     "END_DATE, " +
+                     "DISCOUNT, " +
+                     "STATUS " +
                      "FROM CAMPAIGNS " +
                      "ORDER BY CAMPAIGNS_CODE ASC " +
                      "LIMIT %d OFFSET %d";
@@ -39,7 +47,33 @@ public class CampaignMySQLRepository implements CampaignRepository {
     }
 
     @Override
-    public Optional<Campaigns> findById(String code) {
+    public Optional<Campaigns> findById(String id) {
+        try {
+            String sql = "SELECT * FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
+
+            return template.queryForObject(sql,
+                    new Object[]{id},
+                    (rs, rowNum) ->
+                            Optional.of(new Campaigns(
+                                    rs.getString("CAMPAIGNS_ID"),
+                                    rs.getString("CAMPAIGNS_CODE"),
+                                    rs.getString("CAMPAIGNS_NAME"),
+                                    rs.getString("CAMPAIGNS_DESC"),
+                                    new Image(rs.getString("IMAGE_ID"), ""),
+                                    rs.getDate("START_DATE").toLocalDate(),
+                                    rs.getDate("END_DATE").toLocalDate(),
+                                    rs.getBigDecimal("DISCOUNT"),
+                                    rs.getString("STATUS"),
+                                    ""
+                            ))
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<Campaigns> findByCode(String code) {
         try {
             String sql = "SELECT * FROM CAMPAIGNS WHERE CAMPAIGNS_CODE = ?";
 
@@ -66,7 +100,23 @@ public class CampaignMySQLRepository implements CampaignRepository {
 
     @Override
     public Optional<Page<Campaigns>> findByText(String text, Pageable paging) {
-        return Optional.empty();
+        try {
+            String sql = "SELECT * " +
+                        "FROM CAMPAIGNS " +
+                        "WHERE MATCH(CAMPAIGNS_CODE, CAMPAIGNS_NAME, CAMPAIGNS_DESC) AGAINST ( ? ) " +
+                        "ORDER BY CAMPAIGNS_CODE ASC " +
+                        "LIMIT %d OFFSET %d";
+
+            List<Campaigns> campaigns = this.template.query(String.format(sql,
+                                                            paging.getPageSize(),
+                                                            paging.getOffset()),
+                                                            new Object[] { text },
+                                                            new CampaignsRowMapper());
+
+            return Optional.of(new PageImpl<>(campaigns, paging, count()));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -98,6 +148,7 @@ public class CampaignMySQLRepository implements CampaignRepository {
 
             return CompletableFuture.completedFuture(Status.CREATED.name());
         } catch(Exception e) {
+            e.printStackTrace();
             return CompletableFuture.completedFuture(Status.ERROR.name());
         }
     }

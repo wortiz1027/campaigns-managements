@@ -17,9 +17,9 @@ public class CampaignsRowMapper implements RowMapper<Campaigns> {
 
         Campaigns campaigns = new Campaigns();
         campaigns.setCampaignId(rs.getString("CAMPAIGNS_ID"));
-        campaigns.setCampaignId(rs.getString("CAMPAIGNS_CODE"));
-        campaigns.setCampaignId(rs.getString("CAMPAIGNS_NAME"));
-        campaigns.setCampaignId(rs.getString("CAMPAIGNS_DESC"));
+        campaigns.setCampaignCode(rs.getString("CAMPAIGNS_CODE"));
+        campaigns.setCampaignName(rs.getString("CAMPAIGNS_NAME"));
+        campaigns.setCampaignDescription(rs.getString("CAMPAIGNS_DESC"));
         campaigns.setImage(image);
         campaigns.setStartDate(rs.getDate("START_DATE").toLocalDate());
         campaigns.setEndDate(rs.getDate("END_DATE").toLocalDate());

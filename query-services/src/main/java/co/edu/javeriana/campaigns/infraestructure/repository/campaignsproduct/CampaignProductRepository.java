@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 public interface CampaignProductRepository {
 
     Optional<CampaignProduct> findById(CampaignProduct data);
-    Optional<Page<CampaignProduct>> findByCampaignId(CampaignProduct data, Pageable paging);
+    Optional<Page<CampaignProduct>> findProductsByCampaignId(CampaignProduct data, Pageable paging);
     CompletableFuture<String> create(CampaignProduct data);
     CompletableFuture<String> update(CampaignProduct data);
     CompletableFuture<String> delete(CampaignProduct data);

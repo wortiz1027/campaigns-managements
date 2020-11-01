@@ -12,6 +12,7 @@ public interface CampaignRepository {
 
     Optional<Page<Campaigns>> findByAll(Pageable paging);
     Optional<Campaigns> findById(String id);
+    Optional<Campaigns> findByCode(String code);
     Optional<Page<Campaigns>> findByText(String text, Pageable paging);
     CompletableFuture<String> create(Campaigns data);
     CompletableFuture<String> update(Campaigns data);

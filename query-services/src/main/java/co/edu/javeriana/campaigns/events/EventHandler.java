@@ -26,17 +26,19 @@ public class EventHandler {
     public void consumerCampaigns(Campaigns data) {
         LOG.info("recibiendo campaign: {}", data);
 
-        Optional<Campaigns> campaigns = this.campaignRepository.findById(data.getCampaignCode());
+        Optional<Campaigns> campaigns = this.campaignRepository.findById(data.getCampaignId());
 
-        if (data.getStatus().equalsIgnoreCase(Status.CREATED.name()) && campaigns.isEmpty()) {
-            this.campaignRepository.create(campaigns.get());
+        LOG.info("CREANDO_campaign: {}", data.getStatus());
+        if (data.getAction().equalsIgnoreCase(Status.CREATED.name()) && campaigns.isEmpty()) {
+            LOG.info("CREANDO_campaign: {}", data);
+            this.campaignRepository.create(data);
         }
 
-        if (data.getStatus().equalsIgnoreCase(Status.UPDATED.name()) && !campaigns.isPresent()) {
+        if (data.getAction().equalsIgnoreCase(Status.UPDATED.name()) && !campaigns.isPresent()) {
             this.campaignRepository.update(campaigns.get());
         }
 
-        if (data.getStatus().equalsIgnoreCase(Status.DELETED.name()) && !campaigns.isPresent()) {
+        if (data.getAction().equalsIgnoreCase(Status.DELETED.name()) && !campaigns.isPresent()) {
             this.campaignRepository.delete(campaigns.get());
         }
 

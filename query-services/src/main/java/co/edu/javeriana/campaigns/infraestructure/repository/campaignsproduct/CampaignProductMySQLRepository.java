@@ -49,9 +49,9 @@ public class CampaignProductMySQLRepository implements CampaignProductRepository
     }
 
     @Override
-    public Optional<Page<CampaignProduct>> findByCampaignId(CampaignProduct data, Pageable paging) {
+    public Optional<Page<CampaignProduct>> findProductsByCampaignId(CampaignProduct data, Pageable paging) {
         try {
-            String sql = "SELECT * " +
+            String sql = "SELECT PRODUCT_ID " +
                         "FROM CAMPAIGNS_PRODUCTS " +
                         "WHERE CAMPAIGNS_ID = ?" +
                         "ORDER BY PRODUCT_ID ASC " +

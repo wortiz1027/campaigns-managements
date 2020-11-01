@@ -3,6 +3,8 @@ package co.edu.javeriana.campaigns.configurations;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.MessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -60,6 +62,15 @@ public class EventsCampaignsProductsConfiguration {
     @Bean
     Binding binding2(Queue queue2, DirectExchange exchange2) {
         return BindingBuilder.bind(queue2).to(exchange2).with(campaignProductRoutingKey);
+    }
+
+    @Bean
+    MessageListenerContainer messageListenerContainer2(ConnectionFactory connectionFactory ) {
+        SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
+        simpleMessageListenerContainer.setConnectionFactory(connectionFactory);
+        simpleMessageListenerContainer.setQueues(queue2());
+        simpleMessageListenerContainer.setMessageListener(new RabbitMQListener());
+        return simpleMessageListenerContainer;
     }
 
 }

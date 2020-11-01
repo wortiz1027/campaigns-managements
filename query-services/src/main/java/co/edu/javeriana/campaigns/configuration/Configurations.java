@@ -2,6 +2,8 @@ package co.edu.javeriana.campaigns.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +25,7 @@ public class Configurations {
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(2);
         executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("products-");
+        executor.setThreadNamePrefix("campaigns-");
         executor.initialize();
         return executor;
     }
@@ -42,6 +44,11 @@ public class Configurations {
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter(serializingObjectMapper());
+    }
+
+    @Bean
+    public AsyncRabbitTemplate asyncRabbitTemplate2(RabbitTemplate rabbitTemplate){
+        return new AsyncRabbitTemplate(rabbitTemplate);
     }
 
 }
