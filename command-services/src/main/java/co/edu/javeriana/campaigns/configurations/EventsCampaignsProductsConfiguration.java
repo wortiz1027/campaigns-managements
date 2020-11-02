@@ -69,7 +69,7 @@ public class EventsCampaignsProductsConfiguration {
         SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
         simpleMessageListenerContainer.setConnectionFactory(connectionFactory);
         simpleMessageListenerContainer.setQueues(queue2());
-        simpleMessageListenerContainer.setMessageListener(new RabbitMQListener());
+
         return simpleMessageListenerContainer;
     }
 

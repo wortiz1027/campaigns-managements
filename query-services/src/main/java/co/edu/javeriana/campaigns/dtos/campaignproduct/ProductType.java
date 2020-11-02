@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ProductType implements java.io.Serializable {
     private String id;
     private String description;
+    private String status;
 }

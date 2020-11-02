@@ -51,13 +51,16 @@ public class CampaignProductMySQLRepository implements CampaignProductRepository
     @Override
     public Optional<Page<CampaignProduct>> findProductsByCampaignId(CampaignProduct data, Pageable paging) {
         try {
-            String sql = "SELECT PRODUCT_ID " +
-                        "FROM CAMPAIGNS_PRODUCTS " +
-                        "WHERE CAMPAIGNS_ID = ?" +
-                        "ORDER BY PRODUCT_ID ASC " +
-                        "LIMIT %d OFFSET %d";
+            String sql = "SELECT PRODUCT_ID, " +
+                         "CAMPAIGNS_PRODUCTS_ID," +
+                         "CAMPAIGNS_ID " +
+                         "FROM CAMPAIGNS_PRODUCTS " +
+                         "WHERE CAMPAIGNS_ID = ? " +
+                         "ORDER BY PRODUCT_ID ASC " +
+                         "LIMIT %d OFFSET %d";
 
             List<CampaignProduct> products = this.template.query(String.format(sql, paging.getPageSize(), paging.getOffset()),
+                    new Object[] { data.getCampaignId() },
                     new CampaignsProductsRowMapper());
 
             return Optional.of(new PageImpl<>(products, paging, count()));

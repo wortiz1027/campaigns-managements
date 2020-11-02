@@ -47,19 +47,19 @@ public class EventHandler {
 
     @RabbitListener(queues = "${events.amqp.campaignproduct.queue}")
     public void consumerCampaignsProducts(CampaignProduct data) {
-        LOG.info("recibiendo campaign product: {}", data);
+        LOG.info("recibiendo_campaign_product: {}", data);
 
         Optional<CampaignProduct> campaigns = this.campaignProductRepository.findById(data);
 
-        if (data.getStatus().equalsIgnoreCase(Status.CREATED.name()) && campaigns.isEmpty()) {
-            this.campaignProductRepository.create(campaigns.get());
+        if (data.getAction().equalsIgnoreCase(Status.CREATED.name()) && campaigns.isEmpty()) {
+            this.campaignProductRepository.create(data);
         }
 
-        if (data.getStatus().equalsIgnoreCase(Status.UPDATED.name()) && !campaigns.isPresent()) {
+        if (data.getAction().equalsIgnoreCase(Status.UPDATED.name()) && !campaigns.isPresent()) {
             this.campaignProductRepository.update(campaigns.get());
         }
 
-        if (data.getStatus().equalsIgnoreCase(Status.DELETED.name()) && !campaigns.isPresent()) {
+        if (data.getAction().equalsIgnoreCase(Status.DELETED.name()) && !campaigns.isPresent()) {
             this.campaignProductRepository.delete(campaigns.get());
         }
 

@@ -17,7 +17,7 @@ public class AsyncConfig {
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(2);
         executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("products-");
+        executor.setThreadNamePrefix("campaigns-");
         executor.initialize();
         return executor;
     }
