@@ -80,16 +80,16 @@ public class CampaignServicesImpl implements CampaignServices {
                 dtos.add(item);
             }
 
-            Map<String, Object> rs = new HashMap<>();
-            rs.put("campaigns", campaigns.get().getContent());
-            rs.put("currentPage", campaigns.get().getNumber());
-            rs.put("totalItems", campaigns.get().getTotalElements());
-            rs.put("totalPages", campaigns.get().getTotalPages());
+            Map<String, Object> data = new HashMap<>();
+            data.put("campaigns", dtos);
+            data.put("currentPage", campaigns.get().getNumber());
+            data.put("totalItems", campaigns.get().getTotalElements());
+            data.put("totalPages", campaigns.get().getTotalPages());
 
             status.setCode(co.edu.javeriana.campaigns.domain.Status.SUCCESS.name());
             status.setDescription("There are rows availables");
             response.setStatus(status);
-            response.setCampaings(dtos);
+            response.setData(data);
 
             return CompletableFuture.completedFuture(response);
         } catch (Exception e) {
@@ -142,16 +142,16 @@ public class CampaignServicesImpl implements CampaignServices {
                 dtos.add(item);
             }
 
-            Map<String, Object> rs = new HashMap<>();
-            rs.put("campaigns"  , campaigns.get().getContent());
-            rs.put("currentPage", campaigns.get().getNumber());
-            rs.put("totalItems" , campaigns.get().getTotalElements());
-            rs.put("totalPages" , campaigns.get().getTotalPages());
+            Map<String, Object> data = new HashMap<>();
+            data.put("campaigns"  , dtos);
+            data.put("currentPage", campaigns.get().getNumber());
+            data.put("totalItems" , campaigns.get().getTotalElements());
+            data.put("totalPages" , campaigns.get().getTotalPages());
 
             status.setCode(co.edu.javeriana.campaigns.domain.Status.SUCCESS.name());
             status.setDescription("There are rows availables");
             response.setStatus(status);
-            response.setCampaings(dtos);
+            response.setData(data);
 
             return CompletableFuture.completedFuture(response);
         } catch (Exception e) {

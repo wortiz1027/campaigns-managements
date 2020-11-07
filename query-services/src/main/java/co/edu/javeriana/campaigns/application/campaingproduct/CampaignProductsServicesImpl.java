@@ -60,15 +60,15 @@ public class CampaignProductsServicesImpl implements CampaignProductsServices {
                 return CompletableFuture.completedFuture(response);
             }
 
+            Map<String, Object> dta = new HashMap<>();
+            dta.put("products", res.get().getProducts());
+            dta.put("currentPage", products.get().getNumber());
+            dta.put("totalItems", products.get().getTotalElements());
+            dta.put("totalPages", products.get().getTotalPages());
+
             CampaignProductDto detail = new CampaignProductDto();
             detail.setId(data.getCampaignId());
-            detail.setProducts(res.get().getProducts());
-
-            Map<String, Object> rs = new HashMap<>();
-            rs.put("products", products.get().getContent());
-            rs.put("currentPage", products.get().getNumber());
-            rs.put("totalItems", products.get().getTotalElements());
-            rs.put("totalPages", products.get().getTotalPages());
+            detail.setData(dta);
 
             status.setCode(co.edu.javeriana.campaigns.domain.Status.SUCCESS.name());
             status.setDescription(String.format("There are rows with products linked with campaing id: %s", data.getCampaignId()));
