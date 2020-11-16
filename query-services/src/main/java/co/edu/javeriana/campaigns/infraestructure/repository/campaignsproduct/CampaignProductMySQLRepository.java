@@ -21,8 +21,15 @@ public class CampaignProductMySQLRepository implements CampaignProductRepository
 
     private final JdbcTemplate template;
 
-    private int count() {
-        return this.template.queryForObject("SELECT count(*) FROM CAMPAIGNS", Integer.class);
+    private int count(String id) {
+
+        String sql = "SELECT count(*) " +
+                     "FROM CAMPAIGNS_PRODUCTS " +
+                     "WHERE CAMPAIGNS_ID = ? " +
+                     "ORDER BY PRODUCT_ID ASC ";
+
+        //return this.template.queryForObject("SELECT count(*) FROM CAMPAIGNS", Integer.class);
+        return this.template.queryForObject(sql, Integer.class, id);
     }
 
     @Override
@@ -63,7 +70,7 @@ public class CampaignProductMySQLRepository implements CampaignProductRepository
                     new Object[] { data.getCampaignId() },
                     new CampaignsProductsRowMapper());
 
-            return Optional.of(new PageImpl<>(products, paging, count()));
+            return Optional.of(new PageImpl<>(products, paging, count(data.getCampaignId())));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
