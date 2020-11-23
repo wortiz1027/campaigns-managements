@@ -1,0 +1,31 @@
+# -----------------------------------------------------------------------------
+# - DOCKERFILE
+# - AUTOR: Brian Suarez | Eduardo Franco | Jhon Celemin | Wilman Ortiz
+# - FECHA: 06-Octubre-2020
+# - DESCRIPCION: Docker-compose que permite la creacion del
+# -              contenedor con el servicio de comandos y queries de campanias
+# ------------------------------------------------------------------------------
+
+version: '3.7'
+services:
+  campaigns-command-services:
+    image: campaigns-command-services:latest
+    container_name: campaigns-command-services
+    hostname: campaigns-command-services
+    restart: always
+    ports:
+      - 8087:8087
+    networks:
+      - ntw_backend
+  campaigns-query-services:
+    image: campaigns-query-services:latest
+    container_name: campaigns-query-services
+    hostname: campaigns-query-services
+    restart: always
+    ports:
+      - 8088:8088
+    networks:
+      - ntw_backend
+networks:
+  ntw_backend:
+    external: true
