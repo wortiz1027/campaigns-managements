@@ -73,12 +73,12 @@ public class CampaignMySQLRepository implements CampaignRepository {
     }
 
     @Override
-    public Optional<Campaigns> findByCode(String id) {
+    public Optional<Campaigns> findByCode(String code) {
         try {
-            String sql = "SELECT * FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
+            String sql = "SELECT * FROM CAMPAIGNS WHERE CAMPAIGNS_CODE = ?";
 
             return template.queryForObject(sql,
-                    new Object[]{id},
+                    new Object[]{code},
                     (rs, rowNum) ->
                             Optional.of(new Campaigns(
                                     rs.getString("CAMPAIGNS_ID"),
