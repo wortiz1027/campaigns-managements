@@ -73,12 +73,12 @@ public class CampaignMySQLRepository implements CampaignRepository {
     }
 
     @Override
-    public Optional<Campaigns> findByCode(String code) {
+    public Optional<Campaigns> findByCode(String id) {
         try {
-            String sql = "SELECT * FROM CAMPAIGNS WHERE CAMPAIGNS_CODE = ?";
+            String sql = "SELECT * FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
 
             return template.queryForObject(sql,
-                    new Object[]{code},
+                    new Object[]{id},
                     (rs, rowNum) ->
                             Optional.of(new Campaigns(
                                     rs.getString("CAMPAIGNS_ID"),
@@ -102,10 +102,10 @@ public class CampaignMySQLRepository implements CampaignRepository {
     public Optional<Page<Campaigns>> findByText(String text, Pageable paging) {
         try {
             String sql = "SELECT * " +
-                        "FROM CAMPAIGNS " +
-                        "WHERE MATCH(CAMPAIGNS_CODE, CAMPAIGNS_NAME, CAMPAIGNS_DESC) AGAINST ( ? ) " +
-                        "ORDER BY CAMPAIGNS_CODE ASC " +
-                        "LIMIT %d OFFSET %d";
+                         "FROM CAMPAIGNS " +
+                         "WHERE MATCH(CAMPAIGNS_CODE, CAMPAIGNS_NAME, CAMPAIGNS_DESC) AGAINST ( ? IN BOOLEAN MODE ) " +
+                         "ORDER BY CAMPAIGNS_CODE ASC " +
+                         "LIMIT %d OFFSET %d";
 
             List<Campaigns> campaigns = this.template.query(String.format(sql,
                                                             paging.getPageSize(),
@@ -122,7 +122,7 @@ public class CampaignMySQLRepository implements CampaignRepository {
     @Override
     public CompletableFuture<String> create(Campaigns data) {
         try {
-            if (findById(data.getCampaignCode()).isPresent()) return CompletableFuture.completedFuture(Status.EXIST.name());
+            if (findById(data.getCampaignId()).isPresent()) return CompletableFuture.completedFuture(Status.EXIST.name());
 
             String sql = "INSERT INTO CAMPAIGNS (CAMPAIGNS_ID, " +
                                                 "CAMPAIGNS_CODE, " +
@@ -156,18 +156,18 @@ public class CampaignMySQLRepository implements CampaignRepository {
     @Override
     public CompletableFuture<String> update(Campaigns data) {
         try {
-            if (findById(data.getCampaignCode()).isPresent()) return CompletableFuture.completedFuture(Status.EXIST.name());
+            if (findById(data.getCampaignId()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
             String sql = "UPDATE CAMPAIGNS SET " +
-                                    "CAMPAIGNS_CODE = ?, " +
-                                    "CAMPAIGNS_NAME = ?, " +
-                                    "CAMPAIGNS_DESC = ?, " +
-                                    "IMAGE_ID = ?, " +
-                                    "START_DATE = ?, " +
-                                    "END_DATE = ?, " +
-                                    "DISCOUNT = ?, " +
-                                    "STATUS = ? " +
-                                    "WHERE CAMPAIGNS_ID = ? " ;
+                                "CAMPAIGNS_CODE = ?, " +
+                                "CAMPAIGNS_NAME = ?, " +
+                                "CAMPAIGNS_DESC = ?, " +
+                                "IMAGE_ID = ?, " +
+                                "START_DATE = ?, " +
+                                "END_DATE = ?, " +
+                                "DISCOUNT = ?, " +
+                                "STATUS = ? " +
+                                "WHERE CAMPAIGNS_ID = ? " ;
 
             this.template.update(sql,
                     data.getCampaignCode(),
@@ -182,6 +182,7 @@ public class CampaignMySQLRepository implements CampaignRepository {
 
             return CompletableFuture.completedFuture(Status.UPDATED.name());
         } catch (Exception e) {
+            e.printStackTrace();
             return CompletableFuture.completedFuture(Status.ERROR.name());
         }
     }
@@ -189,7 +190,7 @@ public class CampaignMySQLRepository implements CampaignRepository {
     @Override
     public CompletableFuture<String> delete(Campaigns data) {
         try {
-            if (findById(data.getCampaignCode()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
+            if (findById(data.getCampaignId()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
             String sql = "DELETE FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
 

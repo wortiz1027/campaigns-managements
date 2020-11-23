@@ -17,14 +17,13 @@ public class CampaignRepositoryImpl implements CampaignRepository {
 
     private final JdbcTemplate template;
 
-
     @Override
-    public Optional<Campaigns> findById(String code) {
+    public Optional<Campaigns> findById(String id) {
         try {
-            String sql = "SELECT * FROM CAMPAIGNS WHERE CAMPAIGNS_CODE = ?";
+            String sql = "SELECT * FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
 
             return template.queryForObject(sql,
-                    new Object[]{code},
+                    new Object[]{id},
                     (rs, rowNum) ->
                             Optional.of(new Campaigns(
                                     rs.getString("CAMPAIGNS_ID"),
@@ -47,7 +46,7 @@ public class CampaignRepositoryImpl implements CampaignRepository {
     @Override
     public CompletableFuture<String> create(Campaigns campaigns) {
         try {
-            if (findById(campaigns.getCampaignCode()).isPresent()) return CompletableFuture.completedFuture(Status.EXIST.name());
+            if (findById(campaigns.getCampaignId()).isPresent()) return CompletableFuture.completedFuture(Status.EXIST.name());
 
             String sql = "INSERT INTO CAMPAIGNS (CAMPAIGNS_ID, " +
                                                 "CAMPAIGNS_CODE, " +
@@ -80,7 +79,7 @@ public class CampaignRepositoryImpl implements CampaignRepository {
     @Override
     public CompletableFuture<String> update(Campaigns campaigns) {
         try {
-            if (findById(campaigns.getCampaignCode()).isPresent()) return CompletableFuture.completedFuture(Status.EXIST.name());
+            if (!findById(campaigns.getCampaignId()).isPresent()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
             String sql = "UPDATE CAMPAIGNS SET " +
                                 "CAMPAIGNS_CODE = ?, " +
@@ -113,7 +112,7 @@ public class CampaignRepositoryImpl implements CampaignRepository {
     @Override
     public CompletableFuture<String> delete(Campaigns campaigns) {
         try {
-            if (findById(campaigns.getCampaignCode()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
+            if (findById(campaigns.getCampaignId()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
             String sql = "DELETE FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
 
