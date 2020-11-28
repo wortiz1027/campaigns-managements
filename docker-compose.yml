@@ -9,7 +9,7 @@
 version: '3.7'
 services:
   campaigns-command-services:
-    image: campaigns-command-services:latest
+    image: wortiz1027/campaigns-command-services:latest
     container_name: campaigns-command-services
     hostname: campaigns-command-services
     restart: always
@@ -18,7 +18,7 @@ services:
     networks:
       - ntw_backend
   campaigns-query-services:
-    image: campaigns-query-services:latest
+    image: wortiz1027/campaigns-query-services:latest
     container_name: campaigns-query-services
     hostname: campaigns-query-services
     restart: always
