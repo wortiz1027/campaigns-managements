@@ -1,5 +1,6 @@
 package co.edu.javeriana.campaigns.infraestructure.repository.campaign;
 
+import co.edu.javeriana.campaigns.domain.CampaignProduct;
 import co.edu.javeriana.campaigns.domain.Campaigns;
 import co.edu.javeriana.campaigns.domain.Image;
 import co.edu.javeriana.campaigns.domain.Status;
@@ -114,13 +115,33 @@ public class CampaignRepositoryImpl implements CampaignRepository {
         try {
             if (findById(campaigns.getCampaignId()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
+            if (existCampaignProduct(campaigns.getCampaignId()) > 1) {
+                String sql = "DELETE FROM CAMPAIGNS_PRODUCTS WHERE CAMPAIGNS_ID = ?";
+
+                this.template.update(sql, campaigns.getCampaignId());
+            }
+
             String sql = "DELETE FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
 
             this.template.update(sql, campaigns.getCampaignId());
 
             return CompletableFuture.completedFuture(Status.DELETED.name());
         } catch (Exception e) {
+            e.printStackTrace();
             return CompletableFuture.completedFuture(Status.ERROR.name());
+        }
+    }
+
+    private int existCampaignProduct(String campaignId) {
+        try {
+            String sql = "SELECT count(*) " +
+                         "FROM CAMPAIGNS C JOIN CAMPAIGNS_PRODUCTS P on C.CAMPAIGNS_ID = P.CAMPAIGNS_ID " +
+                         "WHERE C.CAMPAIGNS_ID = ?";
+
+            return this.template.queryForObject(sql, Integer.class, campaignId);
+        } catch (EmptyResultDataAccessException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 }
