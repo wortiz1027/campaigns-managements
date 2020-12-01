@@ -115,7 +115,7 @@ public class CampaignRepositoryImpl implements CampaignRepository {
         try {
             if (findById(campaigns.getCampaignId()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
-            if (existCampaignProduct(campaigns.getCampaignId()) > 1) {
+            if (existCampaignProduct(campaigns.getCampaignId()) > 0) {
                 String sql = "DELETE FROM CAMPAIGNS_PRODUCTS WHERE CAMPAIGNS_ID = ?";
 
                 this.template.update(sql, campaigns.getCampaignId());

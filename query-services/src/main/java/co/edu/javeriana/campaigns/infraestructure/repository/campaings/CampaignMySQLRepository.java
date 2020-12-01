@@ -192,7 +192,7 @@ public class CampaignMySQLRepository implements CampaignRepository {
         try {
             if (findById(data.getCampaignId()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
-            if (existCampaignProduct(data.getCampaignId()) > 1) {
+            if (existCampaignProduct(data.getCampaignId()) > 0) {
                 String sql = "DELETE FROM CAMPAIGNS_PRODUCTS WHERE CAMPAIGNS_ID = ?";
 
                 this.template.update(sql, data.getCampaignId());
