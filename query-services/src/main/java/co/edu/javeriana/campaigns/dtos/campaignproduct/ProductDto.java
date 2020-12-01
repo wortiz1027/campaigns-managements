@@ -25,6 +25,6 @@ public class ProductDto implements java.io.Serializable {
     private String originCity;
     private String destinationCity;
     private Image image;
-    private String vendorId;
+    private Vendor vendor;
     private String status;
 }

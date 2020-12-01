@@ -192,13 +192,33 @@ public class CampaignMySQLRepository implements CampaignRepository {
         try {
             if (findById(data.getCampaignId()).isEmpty()) return CompletableFuture.completedFuture(Status.NO_EXIST.name());
 
+            if (existCampaignProduct(data.getCampaignId()) > 1) {
+                String sql = "DELETE FROM CAMPAIGNS_PRODUCTS WHERE CAMPAIGNS_ID = ?";
+
+                this.template.update(sql, data.getCampaignId());
+            }
+
             String sql = "DELETE FROM CAMPAIGNS WHERE CAMPAIGNS_ID = ?";
 
             this.template.update(sql, data.getCampaignId());
 
             return CompletableFuture.completedFuture(Status.DELETED.name());
         } catch (Exception e) {
+            e.printStackTrace();
             return CompletableFuture.completedFuture(Status.ERROR.name());
+        }
+    }
+
+    private int existCampaignProduct(String campaignId) {
+        try {
+            String sql = "SELECT count(*) " +
+                        "FROM CAMPAIGNS C JOIN CAMPAIGNS_PRODUCTS P on C.CAMPAIGNS_ID = P.CAMPAIGNS_ID " +
+                        "WHERE C.CAMPAIGNS_ID = ?";
+
+            return this.template.queryForObject(sql, Integer.class, campaignId);
+        } catch (EmptyResultDataAccessException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 }
